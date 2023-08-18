@@ -24,7 +24,6 @@ module.exports = (context) => {
     login: require('./auth/login'),
     register: require('./auth/register'),
     forgotPassword: require('./auth/forgot-password'),
-    multiFactorAuthentication: require('./auth/multi-factor-authentication'),
     resetPassword: require('./auth/reset-password'),
     changePassword: require('./auth/change-password'),
     emailConfirmation: require('./auth/email-confirmation'),

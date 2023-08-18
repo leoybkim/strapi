@@ -16,7 +16,6 @@ const {
   validateRegisterBody,
   validateSendEmailConfirmationBody,
   validateForgotPasswordBody,
-  validateMultiFactorAuthenticationBody,
   validateResetPasswordBody,
   validateEmailConfirmationBody,
   validateChangePasswordBody,
