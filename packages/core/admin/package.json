@@ -96,6 +96,7 @@
     "node-schedule": "2.1.0",
     "p-map": "4.0.0",
     "passport-local": "1.0.0",
+    "passport-totp": "0.0.2",
     "pluralize": "8.0.0",
     "prop-types": "^15.8.1",
     "qs": "6.11.1",
