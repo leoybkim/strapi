@@ -63,6 +63,21 @@ module.exports = [
   },
   {
     method: 'GET',
+    path: '/advanced/qrcode',
+    handler: 'settings.getQRCode',
+    config: {
+      policies: [
+        {
+          name: 'admin::hasPermissions',
+          config: {
+            actions: ['plugin::users-permissions.advanced-settings.read'],
+          },
+        },
+      ],
+    },
+  },
+  {
+    method: 'GET',
     path: '/providers',
     handler: 'settings.getProviders',
     config: {

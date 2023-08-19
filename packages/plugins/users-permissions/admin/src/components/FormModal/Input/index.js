@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { TextInput, ToggleInput } from '@strapi/design-system';
+import { TextInput, ToggleInput, NumberInput } from '@strapi/design-system';
 import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 
@@ -40,27 +40,66 @@ const Input = ({
     : '';
 
   if (type === 'bool') {
-    return (
-      <ToggleInput
-        aria-label={name}
-        checked={value}
-        disabled={disabled}
-        hint={hint}
-        label={label}
-        name={name}
-        offLabel={formatMessage({
-          id: 'app.components.ToggleCheckbox.off-label',
-          defaultMessage: 'Off',
-        })}
-        onLabel={formatMessage({
-          id: 'app.components.ToggleCheckbox.on-label',
-          defaultMessage: 'On',
-        })}
-        onChange={(e) => {
-          onChange({ target: { name, value: e.target.checked } });
-        }}
-      />
-    );
+    if (name === 'multi_factor_authentication') {
+      return (
+          <div>
+            <ToggleInput
+                aria-label={name}
+                checked={value}
+                disabled={disabled}
+                hint={hint}
+                label={label}
+                name={name}
+                offLabel={formatMessage({
+                  id: 'app.components.ToggleCheckbox.off-label',
+                  defaultMessage: 'Off',
+                })}
+                onLabel={formatMessage({
+                  id: 'app.components.ToggleCheckbox.on-label',
+                  defaultMessage: 'On',
+                })}
+                onChange={(e) => {
+                  onChange({ target: { name, value: e.target.checked } });
+                }}
+            />
+            {value && (
+                <div>
+                  <img src={qrImage} alt="QR code"/>
+                  <NumberInput
+                      placeholder="Enter 6-digit code"
+                      value={registrationCode}
+                      onChange={(event) => setRegistrationCode(event.target.value)}
+                  />
+                  <Button onClick={handleMFARegistration}>
+                    Register MFA
+                  </Button>
+                </div>
+            )}
+          </div>
+      );
+    } else {
+      return (
+          <ToggleInput
+              aria-label={name}
+              checked={value}
+              disabled={disabled}
+              hint={hint}
+              label={label}
+              name={name}
+              offLabel={formatMessage({
+                id: 'app.components.ToggleCheckbox.off-label',
+                defaultMessage: 'Off',
+              })}
+              onLabel={formatMessage({
+                id: 'app.components.ToggleCheckbox.on-label',
+                defaultMessage: 'On',
+              })}
+              onChange={(e) => {
+                onChange({ target: { name, value: e.target.checked } });
+              }}
+          />
+      );
+    }
   }
 
   const formattedPlaceholder = placeholder

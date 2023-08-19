@@ -1,6 +1,7 @@
 'use strict';
 
 const passport = require('koa-passport');
+const TOTPStrategy = require('passport-totp').Strategy;
 const compose = require('koa-compose');
 const { ApplicationError, ValidationError } = require('@strapi/utils').errors;
 const { getService } = require('../utils');
@@ -14,10 +15,14 @@ const {
   validateRenewTokenInput,
 } = require('../validation/authentication');
 
+
 module.exports = {
   login: compose([
     async (ctx, next) => {
       const advanced = await strapi.store({type: 'plugin', name: 'users-permissions', key: 'advanced'}).get();
+      if (advanced.multi_factor_authentication) {
+        // TODO LK
+      }
       return passport.authenticate('local', {session: false}, (err, user, info) => {
         if (err) {
           strapi.eventHub.emit('admin.auth.error', {error: err, provider: 'local'});
@@ -41,21 +46,7 @@ module.exports = {
         ctx.state.user = user;
 
         const sanitizedUser = getService('user').sanitizeUser(user);
-        // Multi factor authentication setting check
-        if (advanced.multi_factor_authentication) {
-          // Generate 6 digit code
-          const verificationCode = getService('token').createVerificationToken();
-          getService('auth').sendMultiFactorAuthenticationEmail({
-            user: sanitizedUser,
-            code: verificationCode
-          });
-
-          // Store the verification code and user information in the session for verification later
-          ctx.session.verificationCode = verificationCode;
-          ctx.session.user = user;
-        } else {
-          strapi.eventHub.emit('admin.auth.success', {user: sanitizedUser, provider: 'local'});
-        }
+        strapi.eventHub.emit('admin.auth.success', {user: sanitizedUser, provider: 'local'});
         return next();
       })(ctx);
     },
